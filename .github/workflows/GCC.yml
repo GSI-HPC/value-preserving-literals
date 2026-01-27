@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright © 2025–2026 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH
+#                       Matthias Kretz <m.kretz@gsi.de>
+
+name: GCC
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  gcc:
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [16]
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/mattkretz/cplusplus-ci/gcc${{ matrix.version }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set PATH for cmake-latest
+        run: echo /opt/cmake-latest/bin >> $GITHUB_PATH
+
+      - name: Setup CMake
+        env:
+          CXX: g++
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE:STRING=Release
+
+      - name: Build tests
+        run: cmake --build build
+
+      - name: Run test suite
+        run: cmake --build build --target test

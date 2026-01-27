@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright © 2025–2026 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH
+#                       Matthias Kretz <m.kretz@gsi.de>
+
+name: Deploy API docs
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+
+permissions:
+  contents: write  # Needed to push to gh-pages
+
+jobs:
+  doxygen:
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/mattkretz/cplusplus-ci/doxygen
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+
+      - name: Generate documentation
+        run: make docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/html  # or wherever your Doxygen HTML output goes
+          destination_dir: ${{ github.ref_name }}
+          publish_branch: gh-pages
