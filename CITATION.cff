@@ -1,0 +1,33 @@
+# This CITATION.cff file was initially generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+#
+# SPDX-FileCopyrightText: 2024–2026 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH
+# SPDX-License-Identifier: CC0-1.0
+
+cff-version: 1.2.0
+title: value-preserving-literals
+message: >-
+  If you use this software, please cite it using the metadata from
+  this file. Consider additional citation of the works under
+  references.
+type: software
+authors:
+  - given-names: Matthias
+    family-names: Kretz
+    email: m.kretz@gsi.de
+    affiliation: GSI Helmholtz Centre for Heavy Ion Research
+    orcid: 'https://orcid.org/0000-0002-0867-243X'
+#doi: 10.5281/zenodo.TODO
+#version: 0.0.0
+#date-released: 2024-09-26
+#identifiers:
+#  - type: doi
+#    value: 10.5281/zenodo.TODO
+#    description: Version 0.1.0
+repository-code: 'https://github.com/GSI-HPC/value-preserving-literals'
+keywords:
+  - C++
+  - SIMD
+  - safety
+  - library
+license: LGPL-3.0-or-later

@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright © 2025–2026 GSI Helmholtzzentrum fuer Schwerionenforschung GmbH
+#                       Matthias Kretz <m.kretz@gsi.de>
+
+name: GCC
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  gcc:
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [16]
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/mattkretz/cplusplus-ci/gcc${{ matrix.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run test suite
+        env:
+          CXX: g++
+        run: |
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE:STRING=Release
+          cmake --build build
+          cmake --build build --target test
