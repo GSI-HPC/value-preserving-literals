@@ -15,8 +15,8 @@
 #ifndef INCLUDE_VAL_H_
 #define INCLUDE_VAL_H_
 
-#if __cpp_impl_reflection >= 202506L && __cpp_concepts >= 202002L \
-      && __cpp_deleted_function >= 202403L && __cpp_constexpr_exceptions >= 202411L
+#if __cpp_concepts >= 202002L && __cpp_deleted_function >= 202403L \
+                      && __cpp_constexpr_exceptions >= 202411L
 
 #include <concepts>
 #include <exception>
@@ -72,8 +72,10 @@ namespace vir
   class bad_value_preserving_cast : public std::exception
   {
   private:
+#if __cpp_impl_reflection >= 202506L
     /// Reflection poison to make the type consteval-only
     decltype(^^int) _M_poison;
+#endif
     /// Source location where the error occurred
     source_location _M_where;
 
@@ -102,7 +104,12 @@ namespace vir
      *
      * @return const char* Error message
      */
-    consteval const char*
+#if __cpp_impl_reflection >= 202506L
+    consteval
+#else
+    constexpr
+#endif
+    const char*
     what() const noexcept override
     { return "conversion is not value-preserving"; }
 

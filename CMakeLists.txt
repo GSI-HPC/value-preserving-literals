@@ -20,13 +20,6 @@ target_include_directories(
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Add reflection support for GCC
-include(CheckCXXCompilerFlag)
-check_cxx_compiler_flag(-freflection FLAG_REFLECTION)
-if (FLAG_REFLECTION)
-  add_compile_options(-freflection)
-endif()
-
 set(MSVC_WARNINGS "")
 set(CLANG_WARNINGS "-Wall -Wextra")
 set(GCC_WARNINGS "${CLANG_WARNINGS} -Wconversion -Wsign-conversion")
@@ -57,6 +50,15 @@ enable_testing()
 # Add test for arithmetic.cpp
 add_executable(arithmetic_test tests/arithmetic.cpp)
 target_link_libraries(arithmetic_test PRIVATE value-preserving-literals)
-
-# Add to test suite
 add_test(NAME arithmetic COMMAND arithmetic_test)
+
+# Add reflection support for GCC
+include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag(-freflection FLAG_REFLECTION)
+
+if (FLAG_REFLECTION)
+  add_executable(arithmetic_test_refl tests/arithmetic.cpp)
+  target_link_libraries(arithmetic_test_refl PRIVATE value-preserving-literals)
+  target_compile_options(arithmetic_test_refl PRIVATE -freflection)
+  add_test(NAME arithmetic_refl COMMAND arithmetic_test_refl)
+endif()
